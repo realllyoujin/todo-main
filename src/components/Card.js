@@ -6,7 +6,9 @@ const Card = ({ taskObj, index, deleteTask, updateListArray }) => {
 
     // 카테고리별 색상 매핑 객체
     const categoryColors = {
+        Task: { primaryColor: "#5D93E1", secondaryColor: "#D6E4FB" },
         Work: { primaryColor: "#5D93E1", secondaryColor: "#ECF3FC" },
+        Exam: { primaryColor: "#F5A9BC", secondaryColor: "#F5A9BC" },
         Personal: { primaryColor: "#F9D288", secondaryColor: "#FEFAF1" },
         Other: { primaryColor: "#5DC250", secondaryColor: "#F2FAF1" }
     };

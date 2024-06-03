@@ -65,7 +65,9 @@ const CreateTaskPopup = ({ modal, toggle, save }) => {
                             name="category"
                             margin="dense"
                         >
+                            <MenuItem value="TasK">Task</MenuItem>
                             <MenuItem value="Work">Work</MenuItem>
+                            <MenuItem value="Exam">Exam</MenuItem>
                             <MenuItem value="Personal">Personal</MenuItem>
                             <MenuItem value="Other">Other</MenuItem>
                         </Select>
