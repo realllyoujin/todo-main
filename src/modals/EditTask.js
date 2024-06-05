@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Select, MenuItem } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Select, MenuItem, FormControlLabel, Checkbox } from '@mui/material';
 
 const EditTaskPopup = ({ modal, toggle, updateTask, taskObj }) => {
     const [taskName, setTaskName] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
+    const [completed, setCompleted] = useState(false);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, checked } = e.target;
         if (name === "taskName") {
             setTaskName(value);
         } else if (name === "description") {
             setDescription(value);
         } else if (name === "category") {
             setCategory(value);
+        } else if (name === "completed") {
+            setCompleted(checked);
         }
     };
 
@@ -21,6 +24,7 @@ const EditTaskPopup = ({ modal, toggle, updateTask, taskObj }) => {
         setTaskName(taskObj.Name);
         setDescription(taskObj.Description);
         setCategory(taskObj.Category);
+        setCompleted(taskObj.Completed);
     }, [taskObj]);
 
     const handleUpdate = (e) => {
@@ -29,6 +33,7 @@ const EditTaskPopup = ({ modal, toggle, updateTask, taskObj }) => {
         tempObj['Name'] = taskName;
         tempObj['Description'] = description;
         tempObj['Category'] = category;
+        tempObj['Completed'] = completed;
         updateTask(tempObj);
     };
 
@@ -78,6 +83,17 @@ const EditTaskPopup = ({ modal, toggle, updateTask, taskObj }) => {
                             <MenuItem value="Other">Other</MenuItem>
                         </Select>
                     </div>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={completed}
+                                onChange={handleChange}
+                                name="completed"
+                                color="primary"
+                            />
+                        }
+                        label="Completed"
+                    />
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

@@ -1,17 +1,34 @@
 import React, { useState } from 'react';
 import EditTask from '../modals/EditTask';
+import { Card as MUICard, CardHeader, CardContent, CardActions, Button, Typography, Box, Checkbox, FormControlLabel } from '@mui/material';
+import { styled } from '@mui/system';
+
+// 카테고리별 색상 매핑 객체
+const categoryColors = {
+    Task: { primaryColor: "#5D93E1", secondaryColor: "#D6E4FB" },
+    Work: { primaryColor: "#5D93E1", secondaryColor: "#ECF3FC" },
+    Exam: { primaryColor: "#F5A9BC", secondaryColor: "#F5A9BC" },
+    Personal: { primaryColor: "#F9D288", secondaryColor: "#FEFAF1" },
+    Other: { primaryColor: "#5DC250", secondaryColor: "#F2FAF1" }
+};
+
+// 스타일 설정
+const CardTop = styled(Box)(({ theme, color }) => ({
+    backgroundColor: color,
+    height: '5px'
+}));
+
+const CardHeaderStyled = styled(CardHeader)(({ theme, color }) => ({
+    backgroundColor: color,
+    borderRadius: '10px'
+}));
+
+const ButtonStyled = styled(Button)(({ theme, color }) => ({
+    color: color
+}));
 
 const Card = ({ taskObj, index, deleteTask, updateListArray }) => {
     const [modal, setModal] = useState(false);
-
-    // 카테고리별 색상 매핑 객체
-    const categoryColors = {
-        Task: { primaryColor: "#5D93E1", secondaryColor: "#D6E4FB" },
-        Work: { primaryColor: "#5D93E1", secondaryColor: "#ECF3FC" },
-        Exam: { primaryColor: "#F5A9BC", secondaryColor: "#F5A9BC" },
-        Personal: { primaryColor: "#F9D288", secondaryColor: "#FEFAF1" },
-        Other: { primaryColor: "#5DC250", secondaryColor: "#F2FAF1" }
-    };
 
     // 태스크의 카테고리에 따른 색상 선택
     const taskCategory = taskObj.Category;
@@ -29,23 +46,43 @@ const Card = ({ taskObj, index, deleteTask, updateListArray }) => {
         deleteTask(index);
     };
 
-    return (
-        <div className="card-wrapper mr-5">
-            <div className="card-top" style={{ "backgroundColor": colors.primaryColor }}></div>
-            <div className="task-holder">
-                <span className="card-header" style={{ "backgroundColor": colors.secondaryColor, "borderRadius": "10px" }}>
-                    {taskObj.Name}
-                </span>
-                <p className="mt-3">{taskObj.Description}</p>
-                <p className="mt-1"><strong>Category:</strong> {taskObj.Category}</p>
+    const handleCheckboxChange = (e) => {
+        const updatedTask = { ...taskObj, Completed: e.target.checked };
+        updateTask(updatedTask);
+    };
 
-                <div style={{ "position": "absolute", "top": "160px", "left": "160px" }}>
-                    <button style={{ "color": colors.primaryColor, "cursor": "pointer" }} onClick={() => setModal(true)}>Edit</button>
-                    <button style={{ "color": colors.primaryColor, "cursor": "pointer" }} onClick={handleDelete}>Delete</button>
-                </div>
-            </div>
+    return (
+        <MUICard className="card-wrapper mr-5" sx={{ position: 'relative', marginBottom: '20px' }}>
+            <CardTop color={colors.primaryColor} />
+            <CardContent className="task-holder">
+                <CardHeaderStyled
+                    title={<span style={{ textDecoration: taskObj.Completed ? 'line-through' : 'none' }}>{taskObj.Name}</span>}
+                    color={colors.secondaryColor}
+                />
+                <Typography variant="body2" component="p" className="mt-3" style={{ textDecoration: taskObj.Completed ? 'line-through' : 'none' }}>
+                    {taskObj.Description}
+                </Typography>
+                <Typography variant="body2" component="p" className="mt-1">
+                    <strong>Category:</strong> {taskObj.Category}
+                </Typography>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={taskObj.Completed}
+                            onChange={handleCheckboxChange}
+                            name="completed"
+                            color="primary"
+                        />
+                    }
+                    label="Completed"
+                />
+            </CardContent>
+            <CardActions sx={{ position: 'absolute', bottom: '10px', left: '10px' }}>
+                <ButtonStyled color={colors.primaryColor} onClick={toggle}>Edit</ButtonStyled>
+                <ButtonStyled color={colors.primaryColor} onClick={handleDelete}>Delete</ButtonStyled>
+            </CardActions>
             <EditTask modal={modal} toggle={toggle} updateTask={updateTask} taskObj={taskObj} />
-        </div>
+        </MUICard>
     );
 };
 
